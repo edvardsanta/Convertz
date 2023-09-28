@@ -17,11 +17,15 @@ or with [zigup](https://github.com/marler8997/zigup.git)
 ```shell
 zig build run 
 ```
-
-
-## Possible feature:
-I want to implement something like that too:
+2. Or you can pass arguments
+``` shell
+./convertz hex 452
 ```
-./convertz|zig build run hex <decimal_number>
+```shell
+./convertz oct 452
 ```
+```shell
+./convertz bin 452
+```
+
 
