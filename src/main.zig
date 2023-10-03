@@ -1,7 +1,7 @@
 const std = @import("std");
 const decimal = @import("decimal.zig");
+const Factory = @import("cli.zig").ConverterFactory;
 const expect = std.testing.expect;
-const eql = std.mem.eql;
 const bufPrint = std.fmt.bufPrint;
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -12,23 +12,9 @@ pub fn main() !void {
     defer std.process.argsFree(allocator, args);
     const stdout = std.io.getStdOut().writer();
 
-    // TODO separate this is another file
     if (args.len > 1) {
-        std.debug.print("Arguments: {s}\n", .{args});
-        var systemNumberToParse = args[1];
-        var numberToParse = try std.fmt.parseInt(i64, args[2], 10);
-        if (eql(u8, systemNumberToParse, "hex")) {
-            const dont_fail_please_hexadecimal = try decimal.decimalHexadecimal(numberToParse);
-            _ = dont_fail_please_hexadecimal;
-        } else if (eql(u8, systemNumberToParse, "oct")) {
-            const dont_fail_please_octal = try decimal.decimalOctal(numberToParse);
-            _ = dont_fail_please_octal;
-        } else if (eql(u8, systemNumberToParse, "bin")) {
-            const dont_fail_please_bit = try decimal.decimalBinary(numberToParse);
-            _ = dont_fail_please_bit;
-        } else {
-            try stdout.print("Invalid converter", .{});
-        }
+        const factory = try Factory.new();
+        try factory.calculate_with_params(&args);
         return;
     }
     while (true) {
